@@ -1,0 +1,1860 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSA 450 Roadmap – Champ's Path</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap");
+
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --card: #1c2230;
+        --border: #30363d;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --orange: #f0883e;
+        --purple: #bc8cff;
+        --red: #ff7b72;
+        --yellow: #e3b341;
+        --text: #e6edf3;
+        --muted: #7d8590;
+        --connector: #21262d;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        padding: 0 0 60px;
+      }
+
+      /* ── HEADER ── */
+      header {
+        background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 32px 24px 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 60% at 50% -10%,
+          rgba(88, 166, 255, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      header h1 {
+        font-family: "JetBrains Mono", monospace;
+        font-size: clamp(18px, 4vw, 26px);
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: -0.5px;
+      }
+      header p {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px auto 0;
+        max-width: 600px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* ── PROGRESS ── */
+      .progress-bar-wrap {
+        max-width: 700px;
+        margin: 20px auto 0;
+        padding: 0 24px;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      .progress-track {
+        height: 6px;
+        background: var(--border);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--green));
+        border-radius: 3px;
+        transition: width 0.4s ease;
+        width: 0%;
+      }
+
+      /* ── PHASE HEADER ── */
+      .phase-header {
+        max-width: 780px;
+        margin: 36px auto 0;
+        padding: 0 20px;
+      }
+      .phase-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .phase-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .phase-divider {
+        height: 1px;
+        background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+        margin-top: 12px;
+      }
+
+      /* ── CONNECTOR (the vertical line) ── */
+      .connector-line {
+        width: 2px;
+        height: 32px;
+        background: var(--border);
+        margin: 0 auto;
+        position: relative;
+      }
+      .connector-line::after {
+        content: "▼";
+        position: absolute;
+        bottom: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 8px;
+        color: var(--border);
+      }
+
+      /* ── STEP CARD ── */
+      .step-outer {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .step-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        transition:
+          border-color 0.2s,
+          transform 0.15s;
+        cursor: pointer;
+      }
+      .step-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+      .step-card.done {
+        border-color: var(--green);
+        background: #1a2a1c;
+      }
+
+      .step-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 16px;
+      }
+
+      .step-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--bg);
+        background: var(--accent);
+        border-radius: 5px;
+        padding: 3px 7px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .step-card.done .step-num {
+        background: var(--green);
+      }
+
+      .step-type-tag {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 2px 7px;
+        border-radius: 4px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .tag-theory {
+        background: rgba(188, 140, 255, 0.18);
+        color: var(--purple);
+      }
+      .tag-practice {
+        background: rgba(63, 185, 80, 0.18);
+        color: var(--green);
+      }
+      .tag-both {
+        background: rgba(240, 136, 62, 0.18);
+        color: var(--orange);
+      }
+
+      .step-info {
+        flex: 1;
+      }
+      .step-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.4;
+      }
+      .step-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .step-check {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        margin-top: 2px;
+        color: transparent;
+        font-size: 11px;
+      }
+      .step-card.done .step-check {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+
+      /* ── EXPANDED BODY ── */
+      .step-body {
+        display: none;
+        border-top: 1px solid var(--border);
+        padding: 14px 16px 16px;
+        animation: slideDown 0.18s ease;
+      }
+      .step-body.open {
+        display: block;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .step-body h4 {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .links-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .gfg-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 8px 12px;
+        text-decoration: none;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .gfg-link:hover {
+        background: #1f2937;
+        border-color: var(--accent);
+      }
+      .gfg-link .link-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .gfg-link .link-text {
+        flex: 1;
+      }
+      .gfg-link .link-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--accent);
+        display: block;
+        line-height: 1.3;
+      }
+      .gfg-link .link-desc {
+        font-size: 11px;
+        color: var(--muted);
+        display: block;
+        margin-top: 1px;
+      }
+      .gfg-link .link-badge {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .badge-read {
+        background: rgba(188, 140, 255, 0.2);
+        color: var(--purple);
+      }
+      .badge-solve {
+        background: rgba(63, 185, 80, 0.2);
+        color: var(--green);
+      }
+      .badge-watch {
+        background: rgba(227, 179, 65, 0.2);
+        color: var(--yellow);
+      }
+
+      .tip-box {
+        background: rgba(88, 166, 255, 0.07);
+        border: 1px solid rgba(88, 166, 255, 0.2);
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .tip-box strong {
+        color: var(--accent);
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        max-width: 780px;
+        margin: 48px auto 0;
+        padding: 0 20px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p
+        class="phase-label"
+        style="
+          font-family: &quot;JetBrains Mono&quot;, monospace;
+          letter-spacing: 2px;
+          font-size: 11px;
+        "
+      >
+        CHAMP'S DSA ROADMAP GUIDE CHART
+      </p>
+      <h1>DSA 450 — Complete Learning Flowchart</h1>
+      <p>
+        Click any step to expand links. Check it off when done. Read → Solve in
+        order.<br /><br />
+        This page only gives links and sources for basics and understanding, and
+        to guide on what to move on next.<br />
+        For detailed study and understanding, it is advised you go through your
+        own preferred sources as well to grasp and practice.<br />
+        However pairing with
+        <strong style="color: var(--text)">Abdul Bari (YouTube)</strong> for
+        video lectures on any concept you find confusing is recommended.<br /><br />
+        All links go to
+        <a href="https://www.geeksforgeeks.org/dsa/" target="_blank"
+          >GeeksforGeeks DSA</a
+        >
+        for theory, examples and concepts, alongside
+        <a href="https://450dsa.com" target="_blank">450dsa.com</a> to track
+        problems.
+      </p>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--purple)"></div>
+          Theory / Read
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--green)"></div>
+          Practice / Solve
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--orange)"></div>
+          Mixed (read + solve same step)
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--green)"></div>
+          ✓ Completed
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-label">
+          <span>Progress</span>
+          <span id="progress-text">0 / 30 steps</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </header>
+
+    <div id="roadmap"></div>
+
+    <footer>
+      This page has been AI developed, prompted and reviewed carefully by
+      Championz <br />
+      For any suggestions or issues, dm on discord - <i>championz_</i>
+    </footer>
+
+    <script>
+      const TOTAL = 30
+
+      const phases = [
+        {
+          id: "p0",
+          label: "Phase 0",
+          title: "Pre-DSA: Foundations",
+          steps: [
+            {
+              id: "s01",
+              num: "00",
+              type: "theory",
+              title: "Complexity Analysis — Big-O, Time & Space",
+              sub: "The language of DSA. Learn this before writing a single problem.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Asymptotic Analysis",
+                  desc: "Big-O, Theta, Omega explained",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/analysis-of-algorithms/",
+                },
+                {
+                  icon: "📖",
+                  title: "Time Complexity Guide",
+                  desc: "How to compute complexity of code",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/understanding-time-complexity-simple-examples/",
+                },
+                {
+                  icon: "📖",
+                  title: "Space Complexity",
+                  desc: "Auxiliary space vs total space",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/g-fact-86/",
+                },
+                {
+                  icon: "📖",
+                  title: "Complexity of Sorting Algorithms (reference table)",
+                  desc: "Keep this open as you study sorting",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/time-complexities-of-all-sorting-algorithms/",
+                },
+              ],
+              tip: "⚡ You must be able to look at any loop and say its complexity before touching problems. This step is non-negotiable.",
+            },
+            {
+              id: "s02",
+              num: "01",
+              type: "theory",
+              title: "Recursion — Base cases, call stacks, recurrence",
+              sub: "Everything from trees to DP to backtracking runs on recursion.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Introduction to Recursion",
+                  desc: "What recursion is, how the call stack works",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/introduction-to-recursion-data-structure-and-algorithm-tutorials/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Recursion Practice Problems",
+                  desc: "Factorial, Fibonacci, Tower of Hanoi, Power",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/recursion-practice-problems-solutions/",
+                },
+                {
+                  icon: "📖",
+                  title: "Recursion vs Iteration",
+                  desc: "When to pick which",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/difference-between-recursion-and-iteration/",
+                },
+                {
+                  icon: "📖",
+                  title: "Complexity of Recursive Functions",
+                  desc: "Recurrence relations & Master Theorem",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/how-to-analyse-complexity-of-recurrence-relation/",
+                },
+              ],
+              tip: "⚡ Solve at minimum: factorial, Fibonacci, sum of digits, reverse string, power(x,n) — all recursively before moving on.",
+            },
+          ],
+        },
+        {
+          id: "p1",
+          label: "Phase 1",
+          title: "Linear Data Structures",
+          steps: [
+            {
+              id: "s03",
+              num: "02",
+              type: "both",
+              title: "Arrays — Theory + Problems (36 questions)",
+              sub: "The single most tested topic. Master these patterns.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Array Data Structure Tutorial",
+                  desc: "Declaration, operations, memory layout",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/array-data-structure-guide/",
+                },
+                {
+                  icon: "📖",
+                  title: "Two Pointer Technique",
+                  desc: "Pairs, triplets, palindromes",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/two-pointers-technique/",
+                },
+                {
+                  icon: "📖",
+                  title: "Sliding Window Technique",
+                  desc: "Fixed and variable window patterns",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/window-sliding-technique/",
+                },
+                {
+                  icon: "📖",
+                  title: "Prefix Sum Technique",
+                  desc: "Subarray sums, range queries",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/prefix-sum-array-implementation-applications-competitive-programming/",
+                },
+                {
+                  icon: "📖",
+                  title: "Kadane's Algorithm",
+                  desc: "Maximum subarray sum — a classic",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/largest-sum-contiguous-subarray/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Love Babbar Array Problems (450dsa)",
+                  desc: "36 array problems — start here",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Top Array Interview Questions (GFG)",
+                  desc: "Common patterns: rotate, duplicate, union, intersection",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/",
+                },
+              ],
+              tip: "⚡ Key patterns to recognize: two pointers for pairs/triplets, sliding window for subarray ranges, prefix sum for quick range sums. Dutch Flag (0/1/2 sort) and Kadane's are must-knows.",
+            },
+            {
+              id: "s04",
+              num: "03",
+              type: "both",
+              title: "Matrix — 2D Arrays (10 questions)",
+              sub: "Traversal patterns, in-place operations.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Matrix Data Structure Tutorial",
+                  desc: "Row-major, column-major, traversal",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/matrix/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Spiral Order Traversal",
+                  desc: "Classic interview problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/print-a-given-matrix-in-spiral-form/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Rotate Matrix by 90 degrees",
+                  desc: "In-place rotation",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/inplace-rotate-square-matrix-by-90-degrees/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Search in Row-Column Sorted Matrix",
+                  desc: "Staircase search technique",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/search-in-row-wise-and-column-wise-sorted-matrix/",
+                },
+              ],
+              tip: "⚡ 10 questions only — don't spend more than 3–4 days here. Move on.",
+            },
+            {
+              id: "s05",
+              num: "04",
+              type: "both",
+              title: "Hashing — Hash Maps & Hash Sets",
+              sub: "Reduces O(n²) brute force to O(n). Used in arrays, strings, graphs.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Hashing in DSA Tutorial",
+                  desc: "Hash functions, collision, chaining, open addressing",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/hashing-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Unordered_map in C++ STL",
+                  desc: "The hash map you'll use in every problem",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/unordered_map-in-cpp-stl/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Count Frequency of Elements",
+                  desc: "Your first hash map problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/count-frequencies-elements-array-o1-extra-space-time/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Two Sum (using hash map)",
+                  desc: "Classic O(n) hashing pattern",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/two-sum-pairs-with-given-sum/",
+                },
+              ],
+              tip: "⚡ Learn the C++ STL <strong>unordered_map</strong> and <strong>unordered_set</strong> before strings. You will use them everywhere.",
+            },
+            {
+              id: "s06",
+              num: "05",
+              type: "both",
+              title: "Strings — Theory + Problems (43 questions)",
+              sub: "String manipulation, pattern matching, anagrams, palindromes.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "String Data Structure Tutorial",
+                  desc: "ASCII, char arrays, string ops",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/string-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "KMP Algorithm (Pattern Matching)",
+                  desc: "Efficient substring search in O(n+m)",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/kmp-algorithm-for-pattern-searching/",
+                },
+                {
+                  icon: "📖",
+                  title: "Rabin-Karp Algorithm",
+                  desc: "Hashing-based pattern search",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/rabin-karp-algorithm-for-pattern-searching/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Reverse words in a string",
+                  desc: "Classic string manipulation",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/reverse-words-in-a-given-string/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Check for Anagram",
+                  desc: "Sorting + hashing approach",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/check-whether-two-strings-are-anagram-of-each-other/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Longest Palindromic Substring",
+                  desc: "Expand around center technique",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/longest-palindrome-substring/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All 43 String problems → 450dsa.com",
+                  desc: "Solve full string section",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Strings = arrays of chars. All your two-pointer and sliding window tricks from arrays work here too.",
+            },
+          ],
+        },
+        {
+          id: "p2",
+          label: "Phase 2",
+          title: "Searching & Sorting",
+          steps: [
+            {
+              id: "s07",
+              num: "06",
+              type: "both",
+              title: "Sorting Algorithms — Merge, Quick, Heap Sort",
+              sub: "Learn these from scratch. Not just to sort — to solve divide-and-conquer problems.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Sorting Algorithms Overview",
+                  desc: "All sorting algos with time complexities",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/sorting-algorithms/",
+                },
+                {
+                  icon: "📖",
+                  title: "Merge Sort",
+                  desc: "Divide and conquer — O(n log n)",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/merge-sort/",
+                },
+                {
+                  icon: "📖",
+                  title: "Quick Sort",
+                  desc: "In-place, pivot-based — O(n log n) avg",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/quick-sort-algorithm/",
+                },
+                {
+                  icon: "📖",
+                  title: "Heap Sort",
+                  desc: "Uses max-heap — O(n log n)",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/heap-sort/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Sort an array of 0s, 1s, 2s (Dutch Flag)",
+                  desc: "Must solve with three-pointer",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/sort-an-array-of-0s-1s-and-2s/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Merge Overlapping Intervals",
+                  desc: "Classic sorting problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/merging-intervals/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s08",
+              num: "07",
+              type: "both",
+              title: "Searching — Binary Search & Variations (36 questions)",
+              sub: 'Binary search goes far beyond sorted arrays. "Binary search on answer" is huge.',
+              links: [
+                {
+                  icon: "📖",
+                  title: "Binary Search Tutorial",
+                  desc: "Iterative and recursive, all edge cases",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/binary-search/",
+                },
+                {
+                  icon: "📖",
+                  title: "Binary Search on Answer pattern",
+                  desc: "Book allocation, painter's partition",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/binary-search-on-answer/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Search in Rotated Sorted Array",
+                  desc: "Modified binary search — very common",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/search-an-element-in-a-sorted-and-pivoted-array/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Find Peak Element",
+                  desc: "Binary search on unsorted array",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/find-a-peak-in-a-given-array/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Allocate Minimum Pages (Binary Search on Ans)",
+                  desc: 'Classic "search on answer" problem',
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/allocate-minimum-number-pages/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Searching problems → 450dsa.com",
+                  desc: "Complete the 36 search+sort questions",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ The rule: <strong>if the answer lies in a range and checking a value is easy, binary search works</strong>. This mental model unlocks dozens of problems.",
+            },
+          ],
+        },
+        {
+          id: "p3",
+          label: "Phase 3",
+          title: "Pointer-Based Structures",
+          steps: [
+            {
+              id: "s09",
+              num: "08",
+              type: "both",
+              title: "Linked List — Singly, Doubly, Circular (36 questions)",
+              sub: "Pointers, two-pointer on lists, Floyd's cycle detection.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Linked List Data Structure Tutorial",
+                  desc: "Node structure, types, operations",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/linked-list-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Floyd's Cycle Detection Algorithm",
+                  desc: "Fast and slow pointer — detect loops",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/floyds-cycle-finding-algorithm/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Reverse a Linked List",
+                  desc: "Iterative + recursive both",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/reverse-a-linked-list/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Detect Loop in Linked List",
+                  desc: "Floyd's algorithm in action",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/detect-loop-in-a-linked-list/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Merge Sort on Linked List",
+                  desc: "Divide & conquer on a LL",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/merge-sort-for-linked-list/",
+                },
+                {
+                  icon: "🟩",
+                  title: "LRU Cache Design",
+                  desc: "HashMap + Doubly Linked List — top interview problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/lru-cache-implementation/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All LL problems → 450dsa.com",
+                  desc: "Complete remaining 36 LL questions",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Two-pointer on LL is extremely common: middle of list, kth from end, palindrome check — all use slow/fast pointer.",
+            },
+            {
+              id: "s10",
+              num: "09",
+              type: "both",
+              title: "Stack — Theory + Problems",
+              sub: "LIFO, monotonic stack, expression evaluation.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Stack Data Structure Tutorial",
+                  desc: "Push, pop, peek, applications",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/stack-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Monotonic Stack Concept",
+                  desc: "Next Greater, Previous Smaller patterns",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/introduction-to-monotonic-stack/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Balanced Parentheses",
+                  desc: "Fundamental stack problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/check-for-balanced-parentheses-in-an-expression/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Next Greater Element",
+                  desc: "Monotonic stack pattern",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/next-greater-element/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Stock Span Problem",
+                  desc: "Classic monotonic stack application",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/the-stock-span-problem/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Trapping Rain Water",
+                  desc: "Stack or two-pointer — very common",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/trapping-rain-water/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s11",
+              num: "10",
+              type: "both",
+              title: "Queue & Deque — Theory + Problems",
+              sub: "FIFO, circular queue, deque, sliding window max.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Queue Data Structure Tutorial",
+                  desc: "FIFO, circular queue, priority queue",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/queue-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Deque (Double-ended Queue)",
+                  desc: "Both ends insertable — used in sliding window",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/deque-set-1-introduction-applications/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Sliding Window Maximum (Deque)",
+                  desc: "O(n) using monotonic deque",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Stack+Queue problems → 450dsa.com",
+                  desc: "38 problems in the S&Q section",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ BFS (which you'll use in graphs and trees) uses a queue internally — understanding queue well now pays off later.",
+            },
+          ],
+        },
+        {
+          id: "p4",
+          label: "Phase 4",
+          title: "Trees",
+          steps: [
+            {
+              id: "s12",
+              num: "11",
+              type: "both",
+              title: "Binary Trees — BFS, DFS, Traversals (35 questions)",
+              sub: "Trees are the #1 most asked topic in interviews.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Binary Tree Data Structure Tutorial",
+                  desc: "Node structure, types, properties",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/binary-tree-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Tree Traversals — Inorder, Preorder, Postorder",
+                  desc: "Recursive and iterative both",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/tree-traversals-inorder-preorder-and-postorder/",
+                },
+                {
+                  icon: "📖",
+                  title: "Level Order Traversal (BFS on trees)",
+                  desc: "Queue-based level-by-level scan",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/level-order-tree-traversal/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Height of Binary Tree",
+                  desc: "Foundational recursion on trees",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/write-a-c-program-to-find-the-maximum-depth-or-height-of-a-tree/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Diameter of Binary Tree",
+                  desc: "Max path through root",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/diameter-of-a-binary-tree/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Lowest Common Ancestor (LCA)",
+                  desc: "Important for path problems",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/lowest-common-ancestor-binary-tree-set-1/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Zigzag Level Order Traversal",
+                  desc: "BFS with alternating direction",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/zigzag-tree-traversal/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Binary Tree problems → 450dsa.com",
+                  desc: "35 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Most tree problems = recursion on left subtree + right subtree + combine. Internalize this pattern first.",
+            },
+            {
+              id: "s13",
+              num: "12",
+              type: "both",
+              title: "Binary Search Tree (BST) — 22 questions",
+              sub: "Inorder of BST = sorted array. Extremely useful property.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Binary Search Tree Tutorial",
+                  desc: "Insert, delete, search in BST",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/binary-search-tree-data-structure/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Kth Smallest Element in BST",
+                  desc: "Inorder traversal trick",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/find-k-th-smallest-element-in-bst-order-statistics-in-bst/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Convert BST to Sorted Doubly Linked List",
+                  desc: "Inorder + pointer reassignment",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/convert-a-given-binary-tree-to-doubly-linked-list-type-2/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Lowest Common Ancestor in BST",
+                  desc: "Simpler than in general binary tree",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/lowest-common-ancestor-in-a-binary-search-tree/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All BST problems → 450dsa.com",
+                  desc: "22 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "",
+            },
+          ],
+        },
+        {
+          id: "p5",
+          label: "Phase 5",
+          title: "Advanced Data Structures & Algorithms",
+          steps: [
+            {
+              id: "s14",
+              num: "13",
+              type: "both",
+              title: "Heap / Priority Queue (18 questions)",
+              sub: 'Min-heap, max-heap. "kth largest/smallest" → always heap.',
+              links: [
+                {
+                  icon: "📖",
+                  title: "Heap Data Structure Tutorial",
+                  desc: "Heapify, push, pop, heap property",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/heap-data-structure/",
+                },
+                {
+                  icon: "📖",
+                  title: "Priority Queue in C++ STL",
+                  desc: "How to use priority_queue",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/priority-queue-in-cpp-stl/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Kth Largest Element in Array",
+                  desc: "Min-heap of size k trick",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/k-largestor-smallest-elements-in-an-array/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Merge K Sorted Arrays",
+                  desc: "Min-heap of (value, list, index)",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/merge-k-sorted-arrays/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Median of Stream (Running Median)",
+                  desc: "Two heaps — max-heap + min-heap",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/median-of-stream-of-integers-running-integers/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Heap problems → 450dsa.com",
+                  desc: "18 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s15",
+              num: "14",
+              type: "both",
+              title: "Greedy Algorithms (35 questions)",
+              sub: "Locally optimal choice leads to global optimum.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Greedy Algorithm Tutorial",
+                  desc: "Greedy choice property, when it works",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/greedy-algorithms/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Activity Selection Problem",
+                  desc: "Classic interval scheduling",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/activity-selection-problem-greedy-algo-1/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Job Sequencing with Deadlines",
+                  desc: "Greedy + sorting",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/job-sequencing-problem/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Fractional Knapsack",
+                  desc: "Greedy works here (0/1 needs DP)",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/fractional-knapsack-problem/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Minimum Number of Platforms (Train)",
+                  desc: "Classic greedy/sorting problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/minimum-number-platforms-required-railwaybus-station/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Greedy problems → 450dsa.com",
+                  desc: "35 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Greedy fails when local choice doesn't guarantee global best. When greedy fails → DP. Learn to identify which one to use.",
+            },
+            {
+              id: "s16",
+              num: "15",
+              type: "both",
+              title: "Backtracking (19 questions)",
+              sub: 'Recursion + undo. Used for all "generate all possibilities" problems.',
+              links: [
+                {
+                  icon: "📖",
+                  title: "Backtracking Algorithm Tutorial",
+                  desc: "How backtracking works, recursion tree, pruning",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/introduction-to-backtracking-2/",
+                },
+                {
+                  icon: "🟩",
+                  title: "N-Queens Problem",
+                  desc: "The quintessential backtracking problem",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/n-queen-problem-backtracking-3/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Rat in a Maze",
+                  desc: "Grid pathfinding with backtrack",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/rat-in-a-maze-backtracking-2/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Sudoku Solver",
+                  desc: "Complex constraint satisfaction",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/sudoku-backtracking-7/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Combination Sum",
+                  desc: "All subsets summing to target",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/combinational-sum/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Backtracking problems → 450dsa.com",
+                  desc: "19 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: '⚡ Template: try a choice → recurse → undo the choice. The "undo" is what makes it backtracking vs plain recursion.',
+            },
+            {
+              id: "s17",
+              num: "16",
+              type: "both",
+              title: "Graphs — BFS, DFS, Shortest Path, MST (44 questions)",
+              sub: "Largest section. Build up step by step: traversals → shortest path → MST.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Graph Data Structure Tutorial",
+                  desc: "Adjacency list vs matrix, directed vs undirected",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/graph-data-structure-and-algorithms/",
+                },
+                {
+                  icon: "📖",
+                  title: "BFS (Breadth First Search)",
+                  desc: "Level-by-level using queue — shortest path in unweighted",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/",
+                },
+                {
+                  icon: "📖",
+                  title: "DFS (Depth First Search)",
+                  desc: "Stack/recursion based — connected components, cycle detection",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/depth-first-search-or-dfs-for-a-graph/",
+                },
+                {
+                  icon: "📖",
+                  title: "Dijkstra's Algorithm",
+                  desc: "Shortest path in weighted graph (non-negative)",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/dijkstras-shortest-path-algorithm-greedy-algo-7/",
+                },
+                {
+                  icon: "📖",
+                  title: "Topological Sort",
+                  desc: "For DAGs — scheduling, dependencies",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/topological-sorting/",
+                },
+                {
+                  icon: "📖",
+                  title: "Kruskal's & Prim's (MST)",
+                  desc: "Minimum spanning tree — greedy on graphs",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/",
+                },
+                {
+                  icon: "📖",
+                  title: "Union-Find / Disjoint Set Union (DSU)",
+                  desc: "Cycle detection, connected components",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/introduction-to-disjoint-set-data-structure-or-union-find-algorithm/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Number of Islands",
+                  desc: "BFS/DFS on 2D grid",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/find-the-number-of-islands-using-dfs/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Detect Cycle in Directed Graph",
+                  desc: "DFS with color/state tracking",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/detect-cycle-in-a-graph/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Shortest Path in Weighted Graph (Dijkstra)",
+                  desc: "Priority queue implementation",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/dijkstras-shortest-path-algorithm-using-priority_queue-stl/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Graph problems → 450dsa.com",
+                  desc: "44 problems — the biggest section",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Learn graph topics in this mini-order: representation → BFS → DFS → cycle detection → topo sort → Dijkstra → Bellman-Ford → MST → DSU.",
+            },
+            {
+              id: "s18",
+              num: "17",
+              type: "both",
+              title: "Trie (6 questions)",
+              sub: "Prefix trees — fast string lookups, autocomplete.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Trie Data Structure Tutorial",
+                  desc: "Insert, search, prefix match",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/trie-insert-and-search/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Word Search in Trie",
+                  desc: "Insert words, search prefixes",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/implement-a-trie-prefix-tree/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Longest Common Prefix (Trie)",
+                  desc: "Classic trie application",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/longest-common-prefix-using-trie/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Trie problems → 450dsa.com",
+                  desc: "6 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ Only 6 questions. Treat this as a small detour. The main value is understanding the concept for interviews.",
+            },
+            {
+              id: "s19",
+              num: "18",
+              type: "both",
+              title: "Bit Manipulation (11 questions)",
+              sub: "XOR tricks, bit masking — fast and clean solutions to certain problems.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Bit Manipulation Tutorial",
+                  desc: "AND, OR, XOR, shifts, set/clear/check bit",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/bitwise-algorithms/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Count Set Bits",
+                  desc: "Brian Kernighan's algorithm",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/count-set-bits-in-an-integer/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Find two non-repeating elements",
+                  desc: "XOR trick — very elegant",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/find-two-non-repeating-elements-in-an-array-of-repeating-elements/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All Bit Manipulation problems → 450dsa.com",
+                  desc: "11 problems",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "",
+            },
+          ],
+        },
+        {
+          id: "p6",
+          label: "Phase 6 — BOSS",
+          title: "Dynamic Programming (60 questions)",
+          steps: [
+            {
+              id: "s20",
+              num: "19",
+              type: "theory",
+              title: "DP Fundamentals — Memoization & Tabulation",
+              sub: "Understand overlapping subproblems + optimal substructure first.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Introduction to Dynamic Programming",
+                  desc: "What DP is, top-down vs bottom-up",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/dynamic-programming/",
+                },
+                {
+                  icon: "📖",
+                  title: "Memoization vs Tabulation",
+                  desc: "Top-down (recursive) vs bottom-up (iterative)",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/tabulation-vs-memoization/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Fibonacci with DP (memoize + tabulate)",
+                  desc: "Your first DP problem — do both versions",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/program-for-nth-fibonacci-number/",
+                },
+              ],
+              tip: '⚡ DP is just "smarter recursion with a cache." Never jump to DP — first write the brute-force recursive solution, then optimize with memoization.',
+            },
+            {
+              id: "s21",
+              num: "20",
+              type: "both",
+              title: "1D DP — Climbing Stairs, House Robber, Coin Change",
+              sub: "The simplest DP problems — one-dimensional state.",
+              links: [
+                {
+                  icon: "🟩",
+                  title: "Climbing Stairs (n steps)",
+                  desc: "Classic 1D DP intro",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/count-ways-reach-nth-stair/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Coin Change (min coins)",
+                  desc: "1D DP — unbounded knapsack variant",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/find-minimum-number-of-coins-that-make-a-change/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Longest Increasing Subsequence (LIS)",
+                  desc: "O(n²) DP + O(n log n) with binary search",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/longest-increasing-subsequence-dp-3/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s22",
+              num: "21",
+              type: "both",
+              title: "2D DP — Grid Problems, Unique Paths",
+              sub: "Two state variables → 2D table.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "2D DP Pattern Explanation",
+                  desc: "How to build a 2D table",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/dynamic-programming/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Minimum Path Sum in Grid",
+                  desc: "Row+col as two states",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/minimum-cost-path-left-right-bottom-moves-allowed/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Unique Paths in Grid",
+                  desc: "Count all paths top-left to bottom-right",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/count-all-possible-paths-from-top-left-to-bottom-right/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s23",
+              num: "22",
+              type: "both",
+              title: "Knapsack DP — 0/1, Unbounded, Subset Sum",
+              sub: "The most important DP family for interviews.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "0/1 Knapsack Problem",
+                  desc: "Classic DP with weight/value table",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/0-1-knapsack-problem-dp-10/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Subset Sum Problem",
+                  desc: "Is there a subset with target sum?",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/subset-sum-problem-dp-25/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Unbounded Knapsack",
+                  desc: "Items can repeat — coin change variant",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/unbounded-knapsack-repetition-items-allowed/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Count Subsets with Given Sum",
+                  desc: "Knapsack counting variant",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/count-of-subsets-with-sum-equal-to-x/",
+                },
+              ],
+              tip: "⚡ Once you master 0/1 knapsack, you can solve ~15 problems just by recognizing variations of it.",
+            },
+            {
+              id: "s24",
+              num: "23",
+              type: "both",
+              title: "String DP — LCS, Edit Distance, Palindrome",
+              sub: "Two string states → classic 2D DP.",
+              links: [
+                {
+                  icon: "🟩",
+                  title: "Longest Common Subsequence (LCS)",
+                  desc: "The most important string DP",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/longest-common-subsequence-dp-4/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Edit Distance (Levenshtein)",
+                  desc: "Insert/delete/replace operations",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/edit-distance-dp-5/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Longest Palindromic Subsequence",
+                  desc: "LCS of string with its reverse",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/longest-palindromic-subsequence-dp-12/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Word Break Problem",
+                  desc: "Dictionary lookup + DP",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/word-break-problem-dp-32/",
+                },
+              ],
+              tip: "",
+            },
+            {
+              id: "s25",
+              num: "24",
+              type: "both",
+              title: "Interval DP & DP on Trees",
+              sub: "Matrix chain multiplication, burst balloons, tree DP.",
+              links: [
+                {
+                  icon: "📖",
+                  title: "Matrix Chain Multiplication (Interval DP)",
+                  desc: "How interval DP works",
+                  badge: "read",
+                  url: "https://www.geeksforgeeks.org/dsa/matrix-chain-multiplication-dp-8/",
+                },
+                {
+                  icon: "🟩",
+                  title: "Egg Drop Problem",
+                  desc: "Classic interval/optimization DP",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/egg-dropping-puzzle-dp-11/",
+                },
+                {
+                  icon: "🟩",
+                  title: "All DP problems → 450dsa.com",
+                  desc: "60 problems — do all of them",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+              ],
+              tip: "⚡ DP is 60 problems in the sheet — more than any other topic. Give it at least 3–4 weeks. It will feel impossible at first, then suddenly click.",
+            },
+          ],
+        },
+        {
+          id: "p7",
+          label: "Phase 7",
+          title: "Final Lap — Track & Review",
+          steps: [
+            {
+              id: "s26",
+              num: "25",
+              type: "practice",
+              title: "Topic Revision — Weak areas first",
+              sub: "Go back to the sections where you struggled and re-solve unsolved problems.",
+              links: [
+                {
+                  icon: "🟩",
+                  title: "Your 450dsa.com tracker",
+                  desc: "Check which problems are unsolved — do those now",
+                  badge: "solve",
+                  url: "https://450dsa.com/",
+                },
+                {
+                  icon: "🟩",
+                  title: "GFG DSA Practice (topic-wise)",
+                  desc: "Additional problems on any weak topic",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/practice/",
+                },
+              ],
+              tip: "⚡ Don't re-read theory. Re-solve problems you marked hard or skipped. Active recall beats passive review.",
+            },
+            {
+              id: "s27",
+              num: "26",
+              type: "practice",
+              title: "Mixed Problem Solving — GFG Top 100",
+              sub: "Now do unseen problems without topic hints.",
+              links: [
+                {
+                  icon: "🟩",
+                  title: "Top 100 DSA Interview Questions (GFG)",
+                  desc: "All topics, mixed — simulate real interviews",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/",
+                },
+                {
+                  icon: "🟩",
+                  title: "GFG 160-day Challenge (company-wise)",
+                  desc: "Company-tagged problems",
+                  badge: "solve",
+                  url: "https://www.geeksforgeeks.org/gfg-160-challenge/",
+                },
+              ],
+              tip: "",
+            },
+          ],
+        },
+      ]
+
+      function renderRoadmap() {
+        const container = document.getElementById("roadmap")
+        let html = ""
+
+        phases.forEach((phase, pi) => {
+          html += `
+      <div class="phase-header">
+        <div class="phase-label">${phase.label}</div>
+        <div class="phase-title">${phase.title}</div>
+        <div class="phase-divider"></div>
+      </div>
+    `
+
+          phase.steps.forEach((step, si) => {
+            const typeClass =
+              step.type === "theory"
+                ? "tag-theory"
+                : step.type === "practice"
+                  ? "tag-practice"
+                  : "tag-both"
+            const typeLabel =
+              step.type === "theory"
+                ? "Theory"
+                : step.type === "practice"
+                  ? "Practice"
+                  : "Theory + Practice"
+
+            const linksHtml = step.links
+              .map(
+                (l) => `
+        <a class="gfg-link" href="${l.url}" target="_blank" rel="noopener">
+          <span class="link-icon">${l.icon}</span>
+          <span class="link-text">
+            <span class="link-title">${l.title}</span>
+            <span class="link-desc">${l.desc}</span>
+          </span>
+          <span class="link-badge ${l.badge === "read" ? "badge-read" : l.badge === "watch" ? "badge-watch" : "badge-solve"}">${l.badge}</span>
+        </a>
+      `,
+              )
+              .join("")
+
+            const tipHtml = step.tip
+              ? `<div class="tip-box">${step.tip}</div>`
+              : ""
+
+            html += `
+        <div class="connector-line"></div>
+        <div class="step-outer">
+          <div class="step-card" id="${step.id}" onclick="toggleStep('${step.id}')">
+            <div class="step-header">
+              <span class="step-num">${step.num}</span>
+              <span class="step-type-tag ${typeClass}">${typeLabel}</span>
+              <div class="step-info">
+                <div class="step-title">${step.title}</div>
+                <div class="step-sub">${step.sub}</div>
+              </div>
+              <div class="step-check" id="check-${step.id}">✓</div>
+            </div>
+            <div class="step-body" id="body-${step.id}">
+              <h4>Links — read & solve in order ↓</h4>
+              <div class="links-grid">${linksHtml}</div>
+              ${tipHtml}
+            </div>
+          </div>
+        </div>
+      `
+          })
+        })
+
+        container.innerHTML = html
+        loadState()
+      }
+
+      function toggleStep(id) {
+        const card = document.getElementById(id)
+        const body = document.getElementById("body-" + id)
+        const check = document.getElementById("check-" + id)
+
+        // If clicking the check area vs elsewhere — detect via event
+        // Simple: toggle expand
+        if (body.classList.contains("open")) {
+          body.classList.remove("open")
+        } else {
+          body.classList.add("open")
+        }
+      }
+
+      // Click on the check circle to mark done
+      document.addEventListener("click", function (e) {
+        const check = e.target.closest(".step-check")
+        if (!check) return
+        e.stopPropagation()
+        const id = check.id.replace("check-", "")
+        const card = document.getElementById(id)
+        card.classList.toggle("done")
+        saveState()
+        updateProgress()
+      })
+
+      function saveState() {
+        const done = []
+        document
+          .querySelectorAll(".step-card.done")
+          .forEach((c) => done.push(c.id))
+        localStorage.setItem("dsa450-done", JSON.stringify(done))
+      }
+
+      function loadState() {
+        try {
+          const done = JSON.parse(localStorage.getItem("dsa450-done") || "[]")
+          done.forEach((id) => {
+            const card = document.getElementById(id)
+            if (card) card.classList.add("done")
+          })
+        } catch (e) {}
+        updateProgress()
+      }
+
+      function updateProgress() {
+        const total = document.querySelectorAll(".step-card").length
+        const done = document.querySelectorAll(".step-card.done").length
+        const pct = total ? Math.round((done / total) * 100) : 0
+        document.getElementById("progress-fill").style.width = pct + "%"
+        document.getElementById("progress-text").textContent =
+          `${done} / ${total} steps`
+      }
+
+      renderRoadmap()
+    </script>
+  </body>
+</html>
